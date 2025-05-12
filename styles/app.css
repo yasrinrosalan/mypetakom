@@ -1,0 +1,71 @@
+:root {
+    --primary: #1E3A5F;
+    --primary-light: #E7F1FF;
+    --secondary: #6C757D;
+    --accent-blue: #0074D9;
+    --danger: #E63946;
+    --bg: #416e9b;
+    --surface: #FFFFFF;
+    --border: #DEE2E6;
+    --text-dark: #212529;
+    --text-light: #6C757D;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg) !important;
+    color: var(--text-dark) !important;
+}
+
+.sidebar {
+    background-color: var(--primary) !important;
+    color: #ffffff;
+    min-height: 100vh;
+    padding-top: 30px;
+}
+
+.sidebar .nav-link {
+    color: #ffffff !important;
+    font-weight: 500;
+}
+
+.sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff !important;
+}
+
+.sidebar .nav-link.active {
+    background-color: #ffffff;
+    color: var(--primary) !important;
+    font-weight: 600;
+}
+
+
+.nav-link {
+    font-size: 15px;
+    padding: 10px 8px;
+    border-radius: 6px;
+    transition: 0.2s ease;
+    color: var(--text-dark) !important;
+}
+
+.nav-link:hover {
+    background-color: var(--primary-light);
+    color: var(--primary) !important;
+    font-weight: 500;
+}
+
+.nav-link.active {
+    background-color: var(--primary-light) !important;
+    color: var(--primary) !important;
+    font-weight: 600;
+}
+
+.nav-link.text-danger {
+    color: var(--danger) !important;
+}
+
+.nav-link.text-danger:hover {
+    background-color: #ffe5e5 !important;
+    color: var(--danger) !important;
+}
