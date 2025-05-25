@@ -1,19 +1,31 @@
 <?php
 session_start();
 include '../db_config.php';
+include '../module-1/auth.php';
 
-if (!isset($_SESSION['staff_id']) || $_SESSION['role'] !== 'Advisor') {
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Advisor') {
     echo "Access denied. Only Event Advisors are allowed.";
     exit;
 }
 
 $advisor_id = $_SESSION['user_id'];
 
+if (!isset($_GET['event_id'])) {
+    echo "Invalid event ID.";
+    exit;
+}
+
 $event_id = intval($_GET['event_id']);
-$stmt = $conn->prepare("SELECT * FROM event WHERE event_id = ?");
-$stmt->bind_param("i", $event_id);
+$stmt = $conn->prepare("SELECT * FROM event WHERE event_id = ? AND user_id = ?");
+$stmt->bind_param("ii", $event_id, $advisor_id);
 $stmt->execute();
 $result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    echo "Event not found or access denied.";
+    exit;
+}
+
 $event = $result->fetch_assoc();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -27,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $update->bind_param("ssssii", $name, $date, $location, $status, $merit, $event_id);
     $update->execute();
 
-    $_SESSION['success'] = "✅ Event updated successfully.";
+    $_SESSION['success'] = "Event updated successfully.";
     header("Location: advisor_dashboard.php");
     exit;
 }
@@ -57,8 +69,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <form method="POST" class="bg-white p-4 rounded shadow-sm">
                     <div class="mb-3">
                         <label class="form-label">Event Name:</label>
-                        <input type="text" name="event_name" class="form-control" value="<?= $event['event_name'] ?>"
-                            required>
+                        <input type="text" name="event_name" class="form-control"
+                            value="<?= htmlspecialchars($event['event_name']) ?>" required>
                     </div>
 
                     <div class="mb-3">
@@ -69,19 +81,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                     <div class="mb-3">
                         <label class="form-label">Location:</label>
-                        <input type="text" name="location" class="form-control" value="<?= $event['location'] ?>"
-                            required>
+                        <input type="text" name="location" class="form-control"
+                            value="<?= htmlspecialchars($event['location']) ?>" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Status:</label>
                         <select name="status" class="form-select" required>
-                            <option value="Upcoming" <?= $event['status'] == 'Upcoming' ? 'selected' : '' ?>>Upcoming
+                            <option value="Upcoming" <?= $event['status'] === 'Upcoming' ? 'selected' : '' ?>>Upcoming
                             </option>
-                            <option value="Postponed" <?= $event['status'] == 'Postponed' ? 'selected' : '' ?>>Postponed
-                            </option>
-                            <option value="Cancelled" <?= $event['status'] == 'Cancelled' ? 'selected' : '' ?>>Cancelled
-                            </option>
+                            <option value="Postponed" <?= $event['status'] === 'Postponed' ? 'selected' : '' ?>>
+                                Postponed</option>
+                            <option value="Cancelled" <?= $event['status'] === 'Cancelled' ? 'selected' : '' ?>>
+                                Cancelled</option>
                         </select>
                     </div>
 
