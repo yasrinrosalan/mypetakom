@@ -70,7 +70,7 @@ $result = $stmt->get_result();
                 <h2 class="fw-bold mb-3">My Events - Advisor Dashboard</h2>
 
                 <?php if (!empty($success_message)): ?>
-                <div class="alert alert-success"><?= $success_message ?></div>
+                    <div class="alert alert-success"><?= $success_message ?></div>
                 <?php endif; ?>
 
                 <div class="row g-3 mb-4">
@@ -126,42 +126,42 @@ $result = $stmt->get_result();
 
                 <!-- ini untuk event table -->
                 <?php if ($result->num_rows > 0): ?>
-                <div class="table-responsive">
-                    <center>
-                        <table id="eventsTable" class="table table-striped">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th>Event Name</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Merit Applied</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php while ($row = $result->fetch_assoc()): ?>
-                                <tr>
-                                    <td><?= htmlspecialchars($row['event_name']) ?></td>
-                                    <td><?= htmlspecialchars($row['event_date']) ?></td>
-                                    <td><?= $row['status'] ?></td>
-                                    <td><?= $row['merit_applied'] ? "Yes" : "No" ?></td>
-                                    <td>
-                                        <a class="btn btn-sm btn-info text-white"
-                                            href="event_detail.php?event_id=<?= $row['event_id'] ?>">View</a>
-                                        <a class="btn btn-sm btn-warning"
-                                            href="update_event.php?event_id=<?= $row['event_id'] ?>">Edit</a>
-                                        <a class="btn btn-sm btn-danger"
-                                            href="delete_event.php?event_id=<?= $row['event_id'] ?>"
-                                            onclick="return confirm('Delete this event?');">Delete</a>
-                                    </td>
-                                </tr>
-                                <?php endwhile; ?>
-                            </tbody>
-                        </table>
-                    </center>
-                </div>
+                    <div class="table-responsive">
+                        <center>
+                            <table id="eventsTable" class="table table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Event Name</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Merit Applied</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php while ($row = $result->fetch_assoc()): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($row['event_name']) ?></td>
+                                            <td><?= htmlspecialchars($row['event_date']) ?></td>
+                                            <td><?= $row['status'] ?></td>
+                                            <td><?= $row['merit_applied'] ? "Yes" : "No" ?></td>
+                                            <td>
+                                                <a class="btn btn-sm btn-info text-white"
+                                                    href="event_detail.php?event_id=<?= $row['event_id'] ?>">View</a>
+                                                <a class="btn btn-sm btn-warning"
+                                                    href="update_event.php?event_id=<?= $row['event_id'] ?>">Edit</a>
+                                                <a class="btn btn-sm btn-danger"
+                                                    href="delete_event.php?event_id=<?= $row['event_id'] ?>"
+                                                    onclick="return confirm('Delete this event?');">Delete</a>
+                                            </td>
+                                        </tr>
+                                    <?php endwhile; ?>
+                                </tbody>
+                            </table>
+                        </center>
+                    </div>
                 <?php else: ?>
-                <p class="text-muted">No events found.</p>
+                    <p class="text-muted">No events found.</p>
                 <?php endif; ?>
             </main>
         </div>
@@ -183,82 +183,82 @@ $result = $stmt->get_result();
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 
     <script>
-    $('#eventsTable').DataTable({
-        dom: 'Bfrtip',
-        buttons: [{
-                extend: 'copyHtml5',
-                className: 'btn btn-secondary btn-sm',
-                exportOptions: {
-                    columns: ':not(:last-child)'
-                }
-            },
-            {
-                extend: 'excelHtml5',
-                className: 'btn btn-success btn-sm',
-                exportOptions: {
-                    columns: ':not(:last-child)'
-                }
-            },
-            {
-                extend: 'csvHtml5',
-                className: 'btn btn-info btn-sm',
-                exportOptions: {
-                    columns: ':not(:last-child)'
-                }
-            },
-            {
-                extend: 'pdfHtml5',
-                className: 'btn btn-danger btn-sm',
-                exportOptions: {
-                    columns: ':not(:last-child)'
+        $('#eventsTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [{
+                    extend: 'copyHtml5',
+                    className: 'btn btn-secondary btn-sm',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
                 },
-                orientation: 'landscape',
-                pageSize: 'A4',
-                title: 'Advisor Event Report'
-            },
-            {
-                extend: 'print',
-                className: 'btn btn-primary btn-sm',
-                exportOptions: {
-                    columns: ':not(:last-child)'
+                {
+                    extend: 'excelHtml5',
+                    className: 'btn btn-success btn-sm',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                {
+                    extend: 'csvHtml5',
+                    className: 'btn btn-info btn-sm',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    className: 'btn btn-danger btn-sm',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'A4',
+                    title: 'Advisor Event Report'
+                },
+                {
+                    extend: 'print',
+                    className: 'btn btn-primary btn-sm',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                }
+            ],
+
+            order: [
+                [1, "desc"]
+            ],
+            columnDefs: [{
+                orderable: false,
+                targets: [4]
+            }]
+        });
+
+        const statusData = {
+            labels: ['Upcoming', 'Postponed', 'Cancelled'],
+            datasets: [{
+                label: 'Events',
+                data: [<?= $upcomingEvents ?>, <?= $postponedEvents ?>, <?= $cancelledEvents ?>],
+                backgroundColor: ['#198754', '#ffc107', '#dc3545'],
+                borderWidth: 1
+            }]
+        };
+
+        new Chart(document.getElementById('statusPieChart'), {
+            type: 'pie',
+            data: statusData
+        });
+        new Chart(document.getElementById('statusBarChart'), {
+            type: 'bar',
+            data: statusData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        ],
-
-        order: [
-            [1, "desc"]
-        ],
-        columnDefs: [{
-            orderable: false,
-            targets: [4]
-        }]
-    });
-
-    const statusData = {
-        labels: ['Upcoming', 'Postponed', 'Cancelled'],
-        datasets: [{
-            label: 'Events',
-            data: [<?= $upcomingEvents ?>, <?= $postponedEvents ?>, <?= $cancelledEvents ?>],
-            backgroundColor: ['#198754', '#ffc107', '#dc3545'],
-            borderWidth: 1
-        }]
-    };
-
-    new Chart(document.getElementById('statusPieChart'), {
-        type: 'pie',
-        data: statusData
-    });
-    new Chart(document.getElementById('statusBarChart'), {
-        type: 'bar',
-        data: statusData,
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
+        });
     </script>
 
 </body>

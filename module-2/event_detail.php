@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'Advisor') {
 }
 
 if (!isset($_GET['event_id'])) {
-    echo "❌ No event ID provided.";
+    echo "No event ID provided.";
     exit;
 }
 
@@ -60,26 +60,26 @@ $event = $result->fetch_assoc();
 
                     <p><strong>Approval Letter:</strong>
                         <?php if (!empty($event['approval_letter'])): ?>
-                        <a href="../uploads/<?= urlencode($event['approval_letter']) ?>" target="_blank">
-                            <?= htmlspecialchars($event['approval_letter']) ?>
-                        </a>
+                            <a href="../uploads/<?= urlencode($event['approval_letter']) ?>" target="_blank">
+                                <?= htmlspecialchars($event['approval_letter']) ?>
+                            </a>
                         <?php else: ?>
-                        <em>No approval letter uploaded.</em>
+                            <em>No approval letter uploaded.</em>
                         <?php endif; ?>
                     </p>
 
                     <p><strong>QR Code:</strong></p>
                     <?php if (!empty($event['event_qr_code_url']) && file_exists('../' . $event['event_qr_code_url'])): ?>
-                    <div class="text-center mb-3">
-                        <img src="../<?= $event['event_qr_code_url'] ?>" alt="QR Code" class="img-fluid"
-                            style="max-width: 200px;">
-                    </div>
-                    <div class="text-center">
-                        <a href="../<?= $event['event_qr_code_url'] ?>" class="btn btn-outline-primary"
-                            download>Download QR Code</a>
-                    </div>
+                        <div class="text-center mb-3">
+                            <img src="../<?= $event['event_qr_code_url'] ?>" alt="QR Code" class="img-fluid"
+                                style="max-width: 200px;">
+                        </div>
+                        <div class="text-center">
+                            <a href="../<?= $event['event_qr_code_url'] ?>" class="btn btn-outline-primary"
+                                download>Download QR Code</a>
+                        </div>
                     <?php else: ?>
-                    <p><em>No QR Code available for this event.</em></p>
+                        <p><em>No QR Code available for this event.</em></p>
                     <?php endif; ?>
                 </div>
             </main>

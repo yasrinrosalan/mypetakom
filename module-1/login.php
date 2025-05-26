@@ -25,8 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // case by role
             switch ($role) {
                 case 'Advisor':
-                case 'Coordinator':
-                    $stmt = $conn->prepare("SELECT staff_id FROM event_advisor WHERE user_id = ?");
+                    $stmt = $conn->prepare("SELECT staff_id FROM staff WHERE user_id = ?");
                     $stmt->bind_param("i", $user_id);
                     $stmt->execute();
                     $stmt->bind_result($staff_id);
@@ -34,11 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['staff_id'] = $staff_id;
                     $stmt->close();
 
-                    if ($role == 'Advisor') {
-                        header("Location: ../module-2/advisor_dashboard.php");
-                    } else {
-                        header("Location: ../module-2/coordinator_dashboard.php");
-                    }
+                    header("Location: ../module-2/advisor_dashboard.php");
                     exit;
 
                 case 'Student':
@@ -55,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 case 'Admin':
                 case 'Petakom Administrator':
-                    $stmt = $conn->prepare("SELECT staff_id FROM admin WHERE user_id = ?");
+                    $stmt = $conn->prepare("SELECT staff_id FROM staff WHERE user_id = ?");
                     $stmt->bind_param("i", $user_id);
                     $stmt->execute();
                     $stmt->bind_result($admin_id);
@@ -89,17 +84,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
-    body {
-        background-image: url('../images/bg-img.jpg');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        min-height: 100vh;
-    }
+        body {
+            background-image: url('../images/bg-img.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+        }
 
-    .card {
-        background-color: rgba(255, 255, 255, 0.9);
-    }
+        .card {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
     </style>
 </head>
 
@@ -110,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 style="width: 150px; height: 150px;">
 
             <?php if ($error): ?>
-            <div class="alert alert-danger"><?= $error ?></div>
+                <div class="alert alert-danger"><?= $error ?></div>
             <?php endif; ?>
 
             <form method="POST">
@@ -133,15 +128,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
     <script>
-    document.getElementById('togglePassword').addEventListener('click', function() {
-        const passwordInput = document.getElementById('password');
-        const toggleIcon = document.getElementById('toggleIcon');
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
 
-        const isPassword = passwordInput.type === 'password';
-        passwordInput.type = isPassword ? 'text' : 'password';
-        toggleIcon.classList.toggle('bi-eye');
-        toggleIcon.classList.toggle('bi-eye-slash');
-    });
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type = isPassword ? 'text' : 'password';
+            toggleIcon.classList.toggle('bi-eye');
+            toggleIcon.classList.toggle('bi-eye-slash');
+        });
     </script>
 
 </body>
