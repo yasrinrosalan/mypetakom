@@ -9,7 +9,7 @@ if (isset($_SESSION['role'])) {
             $dashboardUrl = '../module-1/admin_dashboard.php';
             break;
         case 'Student':
-            $dashboardUrl = '../module-3/student_dashboard.php';
+            $dashboardUrl = '../module-4/student_dashboard.php';
             break;
         case 'Coordinator':
             $dashboardUrl = '../module-2/coordinator_dashboard.php';
@@ -27,7 +27,7 @@ if (isset($_SESSION['role'])) {
         <div class="dropdown">
             <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle"
                 id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="../images/avatar.png" alt="User Avatar" width="32" height="32" class="rounded-circle me-2">
+                <img src="../images/cb23098.png" alt="User Avatar" width="32" height="32" class="rounded-circle me-2">
                 <span class="fw-semibold">
                     <?= htmlspecialchars($_SESSION['name'] ?? 'User') ?>
                 </span>

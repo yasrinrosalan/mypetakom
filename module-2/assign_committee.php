@@ -26,9 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['event_id'], $_POST['u
         $stmt = $conn->prepare("INSERT INTO committee (event_id, user_id, role_id) VALUES (?, ?, ?)");
         $stmt->bind_param("iii", $event_id, $user_id, $role_id);
         $stmt->execute();
-        $success_message = "✅ Committee member assigned successfully!";
+        $success_message = "Committee member assigned successfully!";
     } else {
-        $success_message = "⚠️ This student is already assigned for the selected event.";
+        $success_message = "This student is already assigned for the selected event.";
     }
 }
 
@@ -64,49 +64,97 @@ $roles = $conn->query("SELECT cr_id, cr_description FROM c_role ORDER BY cr_desc
                 <h2 class="fw-bold mb-4">Assign Committee to Event</h2>
 
                 <?php if (!empty($success_message)) : ?>
-                <div class="alert alert-info"><?= $success_message ?></div>
+                    <div class="alert alert-info"><?= $success_message ?></div>
                 <?php endif; ?>
 
-                <form method="POST" class="bg-white p-4 rounded shadow-sm">
-                    <div class="mb-3">
-                        <label class="form-label">Select Event:</label>
-                        <select name="event_id" class="form-select" required>
+                <?php if (isset($_SESSION['success_message'])): ?>
+                    <div class="alert alert-info"><?= $_SESSION['success_message'] ?></div>
+                    <?php unset($_SESSION['success_message']); ?>
+                <?php endif; ?>
+
+
+                <form method="POST" action="assign_committee_process.php" class="bg-white p-4 rounded shadow-sm">
+                    <div class="mb-4">
+                        <label for="event_id" class="form-label fw-semibold">Select Event</label>
+                        <select name="event_id" id="event_id" class="form-select" required>
                             <option value="">-- Select Event --</option>
-                            <?php while ($row = $events_result->fetch_assoc()): ?>
-                            <option value="<?= $row['event_id'] ?>"><?= htmlspecialchars($row['event_name']) ?></option>
-                            <?php endwhile; ?>
+                            <?php
+                            while ($event = $events_result->fetch_assoc()) {
+                                echo "<option value='{$event['event_id']}'>{$event['event_name']}</option>";
+                            }
+                            ?>
                         </select>
+                    </div>
+
+                    <div id="committee-rows">
+                        <div class="row g-3 align-items-end committee-row mb-3">
+                            <div class="col-md-5">
+                                <label class="form-label">Student</label>
+                                <select name="student_id[]" class="form-select" required>
+                                    <option value="">-- Select Student --</option>
+                                    <?php
+                                    while ($student = $students->fetch_assoc()) {
+                                        echo "<option value='{$student['user_id']}'>{$student['name']}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label">Committee Role</label>
+                                <select name="role_id[]" class="form-select" required>
+                                    <option value="">-- Select Role --</option>
+                                    <?php
+                                    while ($role = $roles->fetch_assoc()) {
+                                        echo "<option value='{$role['cr_id']}'>{$role['cr_description']}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-outline-danger w-100 remove-row">Remove</button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Select Student:</label>
-                        <select name="user_id" class="form-select" required>
-                            <option value="">-- Select Student --</option>
-                            <?php while ($row = $students->fetch_assoc()): ?>
-                            <option value="<?= $row['user_id'] ?>"><?= htmlspecialchars($row['name']) ?></option>
-                            <?php endwhile; ?>
-                        </select>
+                        <button type="button" class="btn btn-outline-secondary" id="add-row">
+                            <i class="bi bi-plus-circle me-1"></i> Add Another
+                        </button>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Committee Role:</label>
-                        <select name="role_id" class="form-select" required>
-                            <option value="">-- Select Role --</option>
-                            <?php while ($row = $roles->fetch_assoc()): ?>
-                            <option value="<?= $row['cr_id'] ?>"><?= htmlspecialchars($row['cr_description']) ?>
-                            </option>
-                            <?php endwhile; ?>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Assign Committee</button>
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-person-plus me-1"></i> Assign Committees
+                    </button>
                 </form>
+
+
             </main>
         </div>
     </div>
 
     <?php include '../layout/footer.php'; ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('add-row').addEventListener('click', function() {
+            const container = document.getElementById('committee-rows');
+            const row = container.querySelector('.committee-row').cloneNode(true);
+
+            // untuk clearkan value
+            row.querySelectorAll('select').forEach(select => select.value = '');
+            container.appendChild(row);
+        });
+
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-row')) {
+                const rows = document.querySelectorAll('.committee-row');
+                if (rows.length > 1) {
+                    e.target.closest('.committee-row').remove();
+                }
+            }
+        });
+    </script>
+
+
 </body>
 
 </html>

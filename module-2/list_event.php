@@ -55,6 +55,10 @@ $result = $stmt->get_result();
                     </div>
                 </form>
 
+                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addEventModal">
+                    Add New Event
+                </button>
+
                 <?php if ($result->num_rows > 0): ?>
                 <div class="table-responsive">
                     <table id="eventsTable" class="table table-bordered table-striped">
@@ -110,6 +114,52 @@ $result = $stmt->get_result();
     </div>
     <?php include '../layout/footer.php'; ?>
 
+    <!-- add event punya modal -->
+    <div class="modal fade" id="addEventModal" tabindex="-1" aria-labelledby="addEventModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addEventModalLabel">Add New Event</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="register_event.php" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="event_name" class="form-label">Event Name</label>
+                            <input type="text" class="form-control" name="event_name" id="event_name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="event_date" class="form-label">Event Date</label>
+                            <input type="date" class="form-control" name="event_date" id="event_date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Location</label>
+                            <input type="text" class="form-control" name="location" id="location" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select name="status" class="form-select" id="status" required>
+                                <option value="Upcoming">Upcoming</option>
+                                <option value="Postponed">Postponed</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" name="merit_applied" id="merit_applied">
+                            <label class="form-check-label" for="merit_applied">Apply for Merit</label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="approval_letter" class="form-label">Approval Letter (PDF/Image)</label>
+                            <input type="file" name="approval_letter" id="approval_letter" class="form-control"
+                                accept=".pdf,.jpg,.jpeg,.png" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Add Event</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -126,7 +176,7 @@ $result = $stmt->get_result();
             }]
         });
 
-        // paksa refresh page kalau back
+        // untuk refresh page 
         if (performance.navigation.type === 2) {
             location.reload(true);
         }

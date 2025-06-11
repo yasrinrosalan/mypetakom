@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $_SESSION['student_id'] = $student_id;
                     $stmt->close();
 
-                    header("Location: ../module-3/student_dashboard.php");
+                    header("Location: ../module-4/student_dashboard.php");
                     exit;
 
                 case 'Admin':
